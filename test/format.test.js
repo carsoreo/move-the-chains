@@ -89,10 +89,11 @@ test('player names match across Sleeper and ESPN spellings', () => {
 });
 
 test('welcome message names the league and links the shared channels', () => {
-  const text = welcomeText('The Boys', { tradeBlock: '111', transactions: '222' });
+  const text = welcomeText('The Boys', { tradeBlock: '111', transactions: '222', news: '333' });
   assert.match(text, /^👋 \*\*Welcome to The Boys!\*\*/);
   assert.match(text, /<#111>/);
   assert.match(text, /<#222>/);
+  assert.match(text, /<#333>: news and injury updates for every rostered player/);
   assert.ok(text.length < 2000); // Discord's message limit
   assert.doesNotMatch(text, /League history/);
   assert.match(welcomeText('The Boys', {}, 'http://example.test:8080'), /League history:\*\* http:\/\/example\.test:8080/);

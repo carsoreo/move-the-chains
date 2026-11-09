@@ -2,6 +2,10 @@
 
 Versions follow [semantic versioning](https://semver.org).
 
+## 2.1.0 (2026-11-09)
+
+- A league-wide `#all-player-news` channel gets every player news item and injury change, tagged with the team that rosters the player. Team `#player-news` channels still get their own players' news. `#welcome` links the new channel.
+
 ## 2.0.1 (2026-11-07)
 
 - The Sleeper weekly recap follows the fantasy week (`leg`) instead of the NFL week, which can start over in the NFL postseason and would have reposted an old recap.

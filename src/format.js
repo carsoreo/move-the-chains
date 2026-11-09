@@ -54,6 +54,7 @@ export function welcomeText(leagueName, channels, siteUrl) {
     '',
     '**Where things get posted**',
     `• <#${channels.transactions}>: every trade, waiver claim and pickup in the league`,
+    ...(channels.news ? [`• <#${channels.news}>: news and injury updates for every rostered player`] : []),
     "• **#team-moves** in your team's category: your team's moves",
     "• **#player-news** in your team's category: news and injury updates for your players",
     ...site,

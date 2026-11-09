@@ -16,6 +16,7 @@ The league's history site lives in its own repo, [gold-jacket](https://github.co
 - **Team channels.** A **League** category holds the shared channels:
   - `#welcome`: read-only setup steps, kept up to date by the bot.
   - `#transactions` and `#trade-block`.
+  - `#all-player-news`: news and injury updates for every rostered player, tagged with their team.
 
   Each Sleeper team gets its own category, named after the team, with:
   - `#team-moves`: that team's trades, waiver claims and pickups.
@@ -25,7 +26,7 @@ The league's history site lives in its own repo, [gold-jacket](https://github.co
   - Trades, including draft picks and FAAB.
   - Waiver claims, with the winning bid.
   - Free-agent pickups and commissioner moves.
-- **Player news.** Every ten minutes, short fantasy updates from ESPN's free fantasy news feed, plus injury status changes, go to the `#player-news` of the team that rosters the player.
+- **Player news.** Every ten minutes, short fantasy updates from ESPN's free fantasy news feed, plus injury status changes, go to the `#player-news` of the team that rosters the player, and to the league-wide `#all-player-news`.
 - **Linking and roles.** `/link sleeper_username` connects a Discord account to a Sleeper team, mentions the member in their team channel, and gives them the server's **Manager** role. The league's commissioner also gets **Commissioner**.
 - **Trade block.**
   - `/tradeblock add|remove|clear` manages a team's block, with player names autocompleted from its roster and an optional asking price.

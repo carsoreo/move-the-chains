@@ -12,7 +12,7 @@ const { DISCORD_TOKEN, GUILD_ID, LEAGUE_ID } = process.env;
 const STATE_FILE = 'data/state.json';
 fs.mkdirSync('data', { recursive: true });
 const state = {
-  channels: { teams: {} }, // Discord channel ids: category, transactions, tradeBlock, teams[rosterId].{category,moves,news}
+  channels: { teams: {} }, // Discord channel ids: category, transactions, tradeBlock, news, teams[rosterId].{category,moves,news}
   owners: {}, // rosterId -> Sleeper owner_id, to spot people joining
   links: {}, // Discord user id -> rosterId
   blocks: {}, // rosterId -> [{ id, asking }]
@@ -55,6 +55,7 @@ async function ensureChannels(guild) {
   c.welcome = await sync(c.welcome, 'welcome', { parent: c.category, position: 0, topic: 'Start here: how to set up your team' });
   c.transactions = await sync(c.transactions, 'transactions', { parent: c.category });
   c.tradeBlock = await sync(c.tradeBlock, 'trade-block', { parent: c.category });
+  c.news = await sync(c.news, 'all-player-news', { parent: c.category, topic: 'News and injury updates for every rostered player' });
   for (const r of league.rosters) {
     const t = (c.teams[r.roster_id] ??= { moves: c.team?.[r.roster_id] }); // reuse the old single team channel
     t.category = await sync(t.category, league.names[r.roster_id].trim().slice(0, 100), category);
@@ -210,7 +211,9 @@ async function pollNews() {
       if (seen.has(item.id)) continue;
       seen.add(item.id);
       state.seenNews.push(item.id);
-      if (post) await send(state.channels.teams[rid].news, playerUpdateText(playerName(players, pid), item));
+      if (!post) continue;
+      await send(state.channels.teams[rid].news, playerUpdateText(playerName(players, pid), item));
+      await send(state.channels.news, playerUpdateText(`${playerName(players, pid)} · ${league.names[rid]}`, item));
     }
     state.newsPlayers[pid] = true;
   }
@@ -220,7 +223,9 @@ async function pollNews() {
   for (const [pid, rid] of Object.entries(league.ownerOf)) {
     const status = players[pid]?.injury_status ?? null;
     if (pid in state.injuries && state.injuries[pid] !== status) {
-      await send(state.channels.teams[rid].news, `🚑 **${playerName(players, pid)}**: ${state.injuries[pid] ?? 'Healthy'} → ${status ?? 'Healthy'}`);
+      const change = `${state.injuries[pid] ?? 'Healthy'} → ${status ?? 'Healthy'}`;
+      await send(state.channels.teams[rid].news, `🚑 **${playerName(players, pid)}**: ${change}`);
+      await send(state.channels.news, `🚑 **${playerName(players, pid)} · ${league.names[rid]}**: ${change}`);
     }
     state.injuries[pid] = status;
   }
